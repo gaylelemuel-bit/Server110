@@ -49,21 +49,22 @@ def course_info():
 
 #------Copouns----------
 #------Aissignment 1---------
-@app.route("/coupons", methods=["GET"])
-def coupons(): 
-  coupons_list= [
+coupons_list= [
     {"_id": 1, "code": "WELCOME10", "discount": 10},
     {"_id": 2, "code": "SPOOKY25", "discount": 25},
     {"_id": 3, "code": "VIP50", "discount": 50}
   ]
 
-  return coupons_list
+@app.route("/coupons", methods=["GET"])
+def coupons():
+     return coupons_list
 
-  @app.route("/coupons/count", methods=["GET"])
-  def coupons_count(): 
-      count = len(coupons_list)
+@app.route("/coupons/count", methods=["GET"]) 
+def coupons_count():
+    count = len(coupons_list) 
+    return {"count":count}   
 
-      return {"count": count}
+
 
   
 

@@ -60,19 +60,19 @@ products =[
   {"_id": 1, 
   "title": "Nintendo Switch",
   "price":499.99,
-  "cataegory":"electronics",
+  "category":"electronics",
   "image":"https://picsum.photos/seed/1/300/300"
   },
    {"_id": 2, 
   "title": "Smart refrigerator",
   "price":999.99,
-  "cataegory":"kitchen",
+  "category":"kitchen",
   "image":"https://picsum.photos/seed/2/300/300"
   },
  {"_id": 3, 
   "title": "Bluetooth Speaker",
   "price":89.99,
-  "cataegory":"electronics",
+  "category":"electronics",
   "image":"https://picsum.photos/seed/3/300/300"
   }
 
@@ -113,6 +113,42 @@ def create_product():
       "data": new_product
     }),201 #created 
 
+
+#Delete / api/prodcuts/<int:product_id>
+@app.route("/api/products/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+     for index, product in enumerate(products):
+        if product["_id"] == product_id:
+           products.pop(index)
+           return jsonify({
+              "success": True,
+              "message":"product deleted",
+           }),204 #no content
+        return jsonify({
+         "success": False,
+          "message": "product not found"
+   }), 404
+
+# PUT 
+@app.route("/api/products/<int:product_id>" , methods=["PUT"])
+def update_prodcut(product_id):
+   data = request.get_json()
+   for product in products:
+      if product["_id"] == product_id:
+         product["title"] = data["title"]
+         product["price"] = data["price"]
+         product["category"] = data["category"]
+         product["image"] = data["image"]
+         return jsonify({
+         "success": True,
+         "message": "update successfully!"
+      }),200
+
+
+   return jsonify({
+      "success": False,
+      "message": "product not found"
+   }), 404 
 
 
 #------Copouns----------
@@ -172,7 +208,56 @@ def coupon_id(_id):
       "message":"Coupon not found"
     }), 404 
 
+#------Copouns----------
+#------Final Report---------
 
+
+coupons_list=[
+    {"_id": 1, "code": "WELCOME10", "discount": 10},
+    {"_id": 2, "code": "SPOOKY25", "discount": 25},
+    {"_id": 3, "code": "VIP50", "discount": 50}
+]
+
+
+#PUT
+@app.route("/api/coupons/<int:_id>", methods=["PUT"])
+def coupon_udate(_id):
+   data = request.get_json()
+   for coupon in coupons_list:
+      if coupon["_id"] == _id:
+         coupon["code"] = data["code"]
+         coupon["dicount"] = data["discount"]
+         return jsonify({
+         "success": True,
+         "message": "coupon update successfully!"
+      }),201
+   
+   return jsonify({
+      "success": False,
+      "message": "coupon not found"
+   }), 404 
+
+coupons_list=[
+    {"_id": 1, "code": "WELCOME10", "discount": 10},
+    {"_id": 2, "code": "SPOOKY25", "discount": 25},
+    {"_id": 3, "code": "VIP50", "discount": 50}
+]
+
+#DELETE
+@app.route("/api/coupons/<int:_id>", methods=["DELETE"])
+def delete_coupon(_id):
+   for index, coupon in enumerate(coupons_list):
+        if coupon["_id"] == _id:
+           coupons_list.pop(index)
+           return jsonify({
+              "success": True,
+              "message":"coupon deleted!",
+           }),200
+        return jsonify({
+         "success": False,
+          "message": "coupon not found"
+   }), 404
+    
 
 
 if __name__ == "__main__":
